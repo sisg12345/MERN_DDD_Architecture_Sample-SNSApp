@@ -1,0 +1,62 @@
+version: "3.8"
+services:
+  client:
+    container_name: sns-client-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - type: bind
+        source: ./client
+        target: /app/client
+    ports:
+      - "5173:5173"
+    stdin_open: true
+    tty: true
+
+  api:
+    container_name: sns-api-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - type: bind
+        source: ./api
+        target: /app/api
+    ports:
+      - "8000:8000"
+    stdin_open: true
+    tty: true
+
+  mongo:
+    image: mongo
+    container_name: mongo-db
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root # MongoDBの管理者のユーザー名
+      MONGO_INITDB_ROOT_PASSWORD: example # MongoDBの管理者のパスワード
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongo/db:/data/db
+      - ./mongo/configdb:/data/configdb
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root # MongoDBの管理者（rootユーザー）のユーザー名(Mongo ExpressがMongoDBに接続する際に使用)
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example # MongoDBの管理者（rootユーザー）のユーザー名(Mongo ExpressがMongoDBに接続する際に使用)
+      ME_CONFIG_MONGODB_SERVER: mongo # Mongo Expressが接続するMongoDBのサーバーを指定(MongoDBのサービス名)
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/ # MongoDBの接続URL (Mongo ExpressがMongoDBに接続する際に使用)
+      ME_CONFIG_BASICAUTH_USERNAME: root # Mongo Expressへの基本認証のユーザー名
+      ME_CONFIG_BASICAUTH_PASSWORD: example # Mongo Expressへの基本認証のパスワード
+    depends_on:
+      mongo:
+        condition: service_started # mongoコンテナが起動してから起動させる
+
