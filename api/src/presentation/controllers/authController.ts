@@ -1,9 +1,9 @@
 import type { Request, Response, NextFunction } from 'express'
-import { Command as LoginHandlerCommand } from '@/application/useCase/auth/login/command'
-import { Command as RegisterHandlerCommand } from '@/application/useCase/auth/register/command'
 import { diContainer } from '../middlewares/di/inversify.config'
-import { LoginHandler } from '@/application/useCase/auth/login/loginHandler'
+import { Command as LoginCommand } from '@/application/useCase/auth/login/command'
+import { Command as RegisterCommand } from '@/application/useCase/auth/register/command'
 import TYPES from '@/presentation/middlewares/di/symbol'
+import { LoginHandler } from '@/application/useCase/auth/login/loginHandler'
 import { RegisterHandler } from '@/application/useCase/auth/register/registerHandler'
 import { MESSAGE } from '@/shared/constants/message'
 import jwt from 'jsonwebtoken'
@@ -19,7 +19,7 @@ export const login = async (
   res: Response,
 ) => {
   // インプットデータ
-  const inputData = new LoginHandlerCommand(req.body.email, req.body.password)
+  const inputData = new LoginCommand(req.body.email, req.body.password)
 
   // DI
   const LoginHandler = diContainer.get<LoginHandler>(TYPES.ILoginHandler)
@@ -37,7 +37,7 @@ export const register = async (
   res: Response,
 ) => {
   // インプットデータ
-  const inputData = new RegisterHandlerCommand(
+  const inputData = new RegisterCommand(
     req.body.email,
     req.body.password,
     req.body.username,

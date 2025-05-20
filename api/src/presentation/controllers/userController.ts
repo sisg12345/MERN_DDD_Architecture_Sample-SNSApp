@@ -1,11 +1,11 @@
 import type { Request, Response } from 'express'
 import { diContainer } from '@/presentation/middlewares/di/inversify.config'
 import TYPES from '@/presentation/middlewares/di/symbol'
-import { Command as GetUserHandlerCommand } from '@/application/useCase/user/getUser/command'
-import { Command as UpdateUserHandlerCommand } from '@/application/useCase/user/updateUser/command'
-import { Command as DeleteUserHandlerCommand } from '@/application/useCase/user/deleteUser/command'
-import { Command as CreateFollowUserHandlerCommand } from '@/application/useCase/user/createFollower/command'
-import { Command as DeleteFollowUserHandlerCommand } from '@/application/useCase/user/deleteFollower/command'
+import { Command as GetUserCommand } from '@/application/useCase/user/getUser/command'
+import { Command as UpdateUserCommand } from '@/application/useCase/user/updateUser/command'
+import { Command as DeleteUserCommand } from '@/application/useCase/user/deleteUser/command'
+import { Command as CreateFollowUserCommand } from '@/application/useCase/user/createFollower/command'
+import { Command as DeleteFollowUserCommand } from '@/application/useCase/user/deleteFollower/command'
 import { GetUserHandler } from '@/application/useCase/user/getUser/getUserHandler'
 import { UpdateUserHandler } from '@/application/useCase/user/updateUser/updateUserHandler'
 import { DeleteUserHandler } from '@/application/useCase/user/deleteUser/deleteUserHandler'
@@ -20,7 +20,7 @@ import type { User } from '@/types'
  */
 export const getUser = async (req: Request<{ id: string }>, res: Response) => {
   // インプットデータ
-  const inputData = new GetUserHandlerCommand(req.params.id)
+  const inputData = new GetUserCommand(req.params.id)
 
   // DI
   const getUserHandler = diContainer.get<GetUserHandler>(TYPES.IGetUserHandler)
@@ -35,7 +35,7 @@ export const getUser = async (req: Request<{ id: string }>, res: Response) => {
  */
 export const updateUser = async (req: Request<{ id: string }, {}, User>, res: Response) => {
   // インプットデータ
-  const inputData = new UpdateUserHandlerCommand(req.userId ?? '', {
+  const inputData = new UpdateUserCommand(req.userId ?? '', {
     ...req.body,
     id: req.params.id,
   })
@@ -53,7 +53,7 @@ export const updateUser = async (req: Request<{ id: string }, {}, User>, res: Re
  */
 export const deleteUser = async (req: Request<{ id: string }>, res: Response) => {
   // インプットデータ
-  const inputData = new DeleteUserHandlerCommand(req.userId ?? '', req.params.id)
+  const inputData = new DeleteUserCommand(req.userId ?? '', req.params.id)
 
   // DI
   const deleteUserHandler = diContainer.get<DeleteUserHandler>(TYPES.IDeleteUserHandler)
@@ -68,7 +68,7 @@ export const deleteUser = async (req: Request<{ id: string }>, res: Response) =>
  */
 export const createFollowUser = async (req: Request<{ id: string }>, res: Response) => {
   // インプットデータ
-  const inputData = new CreateFollowUserHandlerCommand(req.userId ?? '', req.params.id)
+  const inputData = new CreateFollowUserCommand(req.userId ?? '', req.params.id)
 
   // DI
   const createFollowUserHandler = diContainer.get<CreateFollowerHandler>(
@@ -85,7 +85,7 @@ export const createFollowUser = async (req: Request<{ id: string }>, res: Respon
  */
 export const deleteFollower = async (req: Request<{ id: string }>, res: Response) => {
   // インプットデータ
-  const inputData = new DeleteFollowUserHandlerCommand(req.userId ?? '', req.params.id)
+  const inputData = new DeleteFollowUserCommand(req.userId ?? '', req.params.id)
 
   // DI
   const deleteFollowUserHandler = diContainer.get<DeleteFollowerHandler>(
