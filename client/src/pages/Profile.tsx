@@ -7,7 +7,7 @@ import { logout } from '@/stores/slices/authSlice'
 import type { ResponseResult, User } from '@/types'
 import type { AxiosResponse } from 'axios'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 /**
  * プロフィールページ
@@ -19,6 +19,8 @@ export default function Profile() {
   const [user, setUser] = useState<User>({} as User)
   // Reduxのdispatchフック
   const dispatch = useAppDispatch()
+  // navigateフック
+  const navigate = useNavigate()
 
   /**
    * ユーザーアカウント削除
@@ -46,6 +48,13 @@ export default function Profile() {
         .then((response: AxiosResponse<ResponseResult<User>>) => {
           if (response.data.data) {
             setUser(response.data.data)
+          }
+        })
+        .catch((error) => {
+          // NOTE: zodのリクエストバリデーションエラーで400エラーが返却返却される
+          // その場合は、ユーザ＝が存在しない扱いにして404ページに遷移する
+          if (error.response.status === 400) {
+            navigate('/not-found')
           }
         })
     }
