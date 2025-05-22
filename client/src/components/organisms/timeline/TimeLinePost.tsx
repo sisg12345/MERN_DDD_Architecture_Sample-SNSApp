@@ -5,6 +5,7 @@ import CircleImageWithLabel from '@/components/molecules/image/CircleImageWithLa
 import { Link } from 'react-router-dom'
 import type { Post } from '@/types'
 import TimeLinePostEditMenu from './TimeLinePostEditMenu'
+import { Fragment } from 'react/jsx-runtime'
 
 interface TimeLinePost {
   post: Post
@@ -52,8 +53,17 @@ export default function TimeLinePost({
         />
       </div>
       {/* 投稿のボディー */}
-      <div>
-        <span className="text-sm">{post.message}</span>
+      <div className="px-4">
+        <span className="text-sm">
+          {post.message
+            ? post.message.split('\n').map((line, index, array) => (
+                <Fragment key={index}>
+                  {line}
+                  {index < array.length - 1 && <br />}
+                </Fragment>
+              ))
+            : null}
+        </span>
         {/* 投稿画像 */}
         {post.image && (
           <div className="flex flex-wrap gap-2 mt-2">

@@ -90,7 +90,7 @@ export default function TimeLine({ isLoginUser, userId }: TimeLineProps) {
 
   useEffect(() => {
     /**
-     * 投稿を取得
+     * 投稿を取得 (ログインユーザー)
      */
     const fetchPostByLoginUser = async () => {
       await axios.get('api/posts/timelines/all').then(async (response) => {
@@ -100,6 +100,11 @@ export default function TimeLine({ isLoginUser, userId }: TimeLineProps) {
       })
     }
 
+    /**
+     * 投稿を取得 (一般ユーザー)
+     *
+     * @param userId ユーザーID
+     */
     const fetchPostByUser = async (userId: string) => {
       await axios.get(`api/posts/timeline/${userId}`).then(async (response) => {
         setPosts(response.data.data ?? [])

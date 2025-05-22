@@ -9,6 +9,7 @@ import { Command as UpdatePostCommand } from '@/application/useCase/post/updateP
 import { Command as DeletePostCommand } from '@/application/useCase/post/deletePost/command'
 import { Command as CreatePostLikeCommand } from '@/application/useCase/post/createPostLike/command'
 import { Command as GetTimeLinePostsCommand } from '@/application/useCase/post/getTimeLinePosts/command'
+import { Command as GetTimelineAllPostsCommand } from '@/application/useCase/post/getTimelineAllPosts/command'
 import { CreatePostHandler } from '@/application/useCase/post/createPost/createPostHandler'
 import { UpdatePostHandler } from '@/application/useCase/post/updatePost/updatePostHandler'
 import { DeletePostHandler } from '@/application/useCase/post/deletePost/deletePostHandler'
@@ -122,7 +123,7 @@ export const deletePostLike = async (req: Request<{ id: string }>, res: Response
  */
 export const getTimelinePosts = async (req: Request<{ id: string }>, res: Response) => {
   // インプットデータ
-  const inputData = new GetTimeLinePostsCommand(req.params.id)
+  const inputData = new GetTimeLinePostsCommand(req.userId ?? '', req.params.id)
 
   // DI
   const getTimeLinePostsHandler = diContainer.get<GetTimeLinePostsHandler>(
@@ -139,7 +140,7 @@ export const getTimelinePosts = async (req: Request<{ id: string }>, res: Respon
  */
 export const getTimelineAllPosts = async (req: Request, res: Response) => {
   // インプットデータ
-  const inputData = new GetTimeLinePostsCommand(req.userId ?? '')
+  const inputData = new GetTimelineAllPostsCommand(req.userId ?? '')
 
   // DI
   const getTimelineAllPostsHandler = diContainer.get<GetTimelineAllPostsHandler>(

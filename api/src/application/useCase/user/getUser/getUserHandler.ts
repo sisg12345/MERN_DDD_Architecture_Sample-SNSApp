@@ -9,10 +9,14 @@ import { NotFoundError } from '@/shared/errors/notFoundError'
 import type { User } from '@/types'
 import { UserModel } from '@/infrastructure/database/models/user'
 import { log } from '@/shared/decorators/log'
+import { IUserService } from '@/domain/interfaces/services/IUserService'
 
 @injectable()
 export class GetUserHandler implements IGetUserHandler {
-  constructor(@inject(TYPES.IUserRepository) private readonly _userRepository: IUserRepository) {}
+  constructor(
+    @inject(TYPES.IUserService) private readonly _userService: IUserService,
+    @inject(TYPES.IUserRepository) private readonly _userRepository: IUserRepository,
+  ) {}
 
   @log
   public async handle(command: Command): Promise<ResponseResult<Omit<User, 'password'>>> {

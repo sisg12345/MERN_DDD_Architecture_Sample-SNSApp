@@ -37,7 +37,7 @@ export class GetTimeLinePostsHandler implements IGetTimeLinePostsHandler {
       })
 
       // 投稿にユーザーがいいね済み情報を追加
-      data = await this._postService.addPostInfo(command.userId, posts)
+      data = await this._postService.addPostInfo(command.loginUserId, posts)
     } catch (error) {
       status = 500
       message = MESSAGE.error.server
