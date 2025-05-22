@@ -1,3 +1,4 @@
+import { MESSAGE } from '@/shared/constants/message'
 import { Request, Response, NextFunction, RequestHandler } from 'express'
 import { AnyZodObject } from 'zod'
 
@@ -12,8 +13,7 @@ export const validate =
       })
 
       return next()
-    } catch (error) {
-      // res.status(400).json(MESSAGE.error.validation)
-      res.status(400).json(error)
+    } catch {
+      res.status(400).json(MESSAGE.error.validation)
     }
   }
