@@ -29,8 +29,8 @@ export class GetUserHandler implements IGetUserHandler {
         throw new NotFoundError(MESSAGE.error.notFound)
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       // パスワードを除外
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...rest } = user.toObject()
       data = rest
     } catch (error) {

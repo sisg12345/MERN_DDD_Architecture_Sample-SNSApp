@@ -35,8 +35,7 @@ export class FollowRepository implements IFollowRepository {
    */
   @log
   public async addFollower(followerId: string, followingId: string): Promise<void> {
-    const follow = new MongoFollow({ followerId, followingId })
-    await follow.save()
+    await MongoFollow.create({ followerId, followingId })
   }
 
   /**

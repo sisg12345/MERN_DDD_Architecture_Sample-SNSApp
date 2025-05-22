@@ -1,7 +1,6 @@
 import { injectable } from 'inversify'
-import MongoLike from '@/infrastructure/database/models/like'
+import MongoLike, { LikeModel } from '@/infrastructure/database/models/like'
 import { ILikeRepository } from '@/domain/interfaces/repositories/ILikeRepository'
-import type { Like } from '@/types'
 import { log } from '@/shared/decorators/log'
 
 @injectable()
@@ -14,10 +13,7 @@ export class LikeRepository implements ILikeRepository {
    */
   @log
   public async addPostLike(postId: string, userId: string): Promise<void> {
-    // いいねを作成
-    const newLike = new MongoLike({ postId, userId })
-    // いいねを保存
-    await newLike.save()
+    await MongoLike.create({ postId, userId })
   }
 
   /**
@@ -39,7 +35,7 @@ export class LikeRepository implements ILikeRepository {
    * @returns Like | null
    */
   @log
-  public async findLikeByUserAndPost(postId: string, userId: string): Promise<Like | null> {
+  public async findLikeByUserAndPost(postId: string, userId: string): Promise<LikeModel | null> {
     return await MongoLike.findOne({ postId, userId })
   }
 }

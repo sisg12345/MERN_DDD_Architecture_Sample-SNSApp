@@ -44,10 +44,7 @@ export class PostRepository implements IPostRepository {
    */
   @log
   public async createPost(userId: string, message: string, image: string): Promise<void> {
-    // 投稿を作成
-    const newPost = new MongoPost({ userId, message, image })
-    // 投稿を保存
-    await newPost.save()
+    await MongoPost.create({ userId, message, image })
   }
 
   /**
@@ -99,10 +96,7 @@ export class PostRepository implements IPostRepository {
    */
   @log
   public async addPostLike(postId: string, userId: string): Promise<void> {
-    // いいねを作成
-    const newLike = new MongoLike({ postId, userId })
-    // いいねを保存
-    await newLike.save()
+    await MongoLike.create({ postId, userId })
   }
 
   /**
