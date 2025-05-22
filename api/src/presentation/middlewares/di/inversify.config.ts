@@ -41,6 +41,8 @@ import { ILoginHandler } from '@/application/useCase/auth/login/ILoginHandler'
 import { LoginHandler } from '@/application/useCase/auth/login/loginHandler'
 import { IRegisterHandler } from '@/application/useCase/auth/register/IRegisterHandler'
 import { RegisterHandler } from '@/application/useCase/auth/register/registerHandler'
+import { IGetRecommendUserHandler } from '@/application/useCase/user/getRecommendUser/IGetRecommendUserHandler'
+import { GetRecommendUserHandler } from '@/application/useCase/user/getRecommendUser/getRecommendUserHandler'
 
 /**
  * DIコンテナの設定
@@ -68,6 +70,9 @@ diContainer.bind<ICreateFollowerHandler>(TYPES.ICreateFollowerHandler).to(Create
 diContainer.bind<IDeleteFollowerHandler>(TYPES.IDeleteFollowerHandler).to(DeleteFollowerHandler)
 diContainer.bind<ILoginHandler>(TYPES.ILoginHandler).to(LoginHandler)
 diContainer.bind<IRegisterHandler>(TYPES.IRegisterHandler).to(RegisterHandler)
+diContainer
+  .bind<IGetRecommendUserHandler>(TYPES.IGetRecommendUserHandler)
+  .to(GetRecommendUserHandler)
 
 /**
  * Service symbols for dependency injection.

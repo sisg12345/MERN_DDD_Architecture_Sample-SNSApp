@@ -6,11 +6,13 @@ import { Command as UpdateUserCommand } from '@/application/useCase/user/updateU
 import { Command as DeleteUserCommand } from '@/application/useCase/user/deleteUser/command'
 import { Command as CreateFollowUserCommand } from '@/application/useCase/user/createFollower/command'
 import { Command as DeleteFollowUserCommand } from '@/application/useCase/user/deleteFollower/command'
+import { Command as GetRecommendUserCommand } from '@/application/useCase/user/getRecommendUser/command'
 import { GetUserHandler } from '@/application/useCase/user/getUser/getUserHandler'
 import { UpdateUserHandler } from '@/application/useCase/user/updateUser/updateUserHandler'
 import { DeleteUserHandler } from '@/application/useCase/user/deleteUser/deleteUserHandler'
 import { CreateFollowerHandler } from '@/application/useCase/user/createFollower/createFollowerHandler'
 import { DeleteFollowerHandler } from '@/application/useCase/user/deleteFollower/deleteFollowerHandlerHandler'
+import { GetRecommendUserHandler } from '@/application/useCase/user/getRecommendUser/getRecommendUserHandler'
 import type { User } from '@/types'
 
 /* eslint-disable @typescript-eslint/no-empty-object-type */
@@ -95,4 +97,21 @@ export const deleteFollower = async (req: Request<{ id: string }>, res: Response
   const { status, message } = await deleteFollowUserHandler.handle(inputData)
 
   res.status(status).json({ message })
+}
+
+/**
+ * おすすめユーザーを取得
+ */
+export const getRecommendUser = async (req: Request, res: Response) => {
+  // インプットデータ
+  const inputData = new GetRecommendUserCommand(req.userId ?? '', 10)
+
+  // DI
+  const getRecommendUserHandler = diContainer.get<GetRecommendUserHandler>(
+    TYPES.IGetRecommendUserHandler,
+  )
+  // ユースケース実行
+  const { status, message, data } = await getRecommendUserHandler.handle(inputData)
+
+  res.status(status).json({ message, data })
 }

@@ -17,6 +17,7 @@ const TYPES = {
   IDeleteFollowerHandler: Symbol.for('IDeleteFollowerHandler'),
   ILoginHandler: Symbol.for('ILoginHandler'),
   IRegisterHandler: Symbol.for('IRegisterHandler'),
+  IGetRecommendUserHandler: Symbol.for('IGetRecommendUserHandler'),
 
   /**
    * Service symbols for dependency injection.

@@ -44,4 +44,10 @@ router.put('/:id/follow', validate(createFollowUserSchema), verifyToken, createF
  */
 router.put('/:id/unfollow', validate(deleteFollowUserSchema), verifyToken, deleteFollower)
 
+/**
+ * おすすめユーザーを取得
+ */
+
+router.get('/recommends/all', verifyToken, getRecommendUser)
+
 export default router

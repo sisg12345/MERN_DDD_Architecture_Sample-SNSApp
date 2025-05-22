@@ -38,4 +38,48 @@ export class LikeRepository implements ILikeRepository {
   public async findLikeByUserAndPost(postId: string, userId: string): Promise<LikeModel | null> {
     return await MongoLike.findOne({ postId, userId })
   }
+
+  /**
+   * いいねの数が多いユーザーを取得（指定ユーザー以外、日付の新しい順）
+   *
+   * @param userId 除外するユーザーID
+   * @param count 件数
+   */
+  @log
+  public async findTopLikeUsers(
+    userId: string,
+    count: number,
+  ): Promise<{ userId: string; postId: string }[]> {
+    // 指定ユーザー以外で、いいね数が多い順＆日付の新しい順にユーザーを取得
+    const pipeline = [
+      { $match: { userId: { $ne: userId }, postId: { $exists: true, $ne: null } } },
+      {
+        $group: {
+          _id: { userId: '$userId', postId: '$postId' },
+          postId: { $first: '$postId' },
+          userId: { $first: '$userId' },
+          likeCount: { $sum: 1 },
+          latestLike: { $max: '$createdAt' },
+        },
+      },
+      { $sort: { likeCount: -1 as const, latestLike: -1 as const } },
+      { $limit: count },
+    ]
+
+    // 取得結果
+    const result = await MongoLike.aggregate(pipeline)
+
+    // 返却データ
+    const returnResult: { userId: string; postId: string }[] = []
+    result.map((like) => {
+      const { userId, postId } = like._id
+
+      returnResult.push({
+        userId,
+        postId,
+      })
+    })
+
+    return returnResult
+  }
 }
