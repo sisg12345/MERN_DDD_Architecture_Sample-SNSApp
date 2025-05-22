@@ -5,6 +5,7 @@ import {
   getUser,
   updateUser,
   deleteFollower,
+  getRecommendUser,
 } from '@/presentation/controllers/userController'
 import { verifyToken } from '@/presentation/controllers/authController'
 import { validate } from '@/presentation/validations/validate'

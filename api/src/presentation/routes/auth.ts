@@ -1,17 +1,19 @@
 import express from 'express'
 import { login, register, verifyRefreshToken } from '@/presentation/controllers/authController'
+import { validate } from '@/presentation/validations/validate'
+import { loginSchema, registerSchema } from '@/presentation/validations/schemas/authSchema'
 
 const router = express.Router()
 
 /**
  * ユーザーログイン
  */
-router.post('/login', login)
+router.post('/login', validate(loginSchema), login)
 
 /**
  * ユーザー登録
  */
-router.post('/register', register)
+router.post('/register', validate(registerSchema), register)
 
 /**
  * リフレッシュトークン検証
