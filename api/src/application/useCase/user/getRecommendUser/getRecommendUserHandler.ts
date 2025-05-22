@@ -9,6 +9,12 @@ import TYPES from '@/presentation/middlewares/di/symbol'
 import { ILikeRepository } from '@/domain/interfaces/repositories/ILikeRepository'
 import { IUserRepository } from '@/domain/interfaces/repositories/IUserRepository'
 
+interface User {
+  userId: string
+  username: string
+  profilePicture: string
+}
+
 @injectable()
 export class GetRecommendUserHandler implements IGetRecommendUserHandler {
   constructor(
@@ -17,12 +23,10 @@ export class GetRecommendUserHandler implements IGetRecommendUserHandler {
   ) {}
 
   @log
-  public async handle(
-    command: Command,
-  ): Promise<ResponseResult<{ userId: string; username: string }[]>> {
+  public async handle(command: Command): Promise<ResponseResult<User[]>> {
     let status = 200
     let message = MESSAGE.success.fetch
-    const data: { userId: string; username: string }[] = []
+    const data: User[] = []
 
     try {
       // いいねの数が多いユーザーを取得（指定ユーザー以外、日付の新しい順）
@@ -40,6 +44,7 @@ export class GetRecommendUserHandler implements IGetRecommendUserHandler {
             data.push({
               userId: user.userId,
               username: userData.username,
+              profilePicture: userData.profilePicture,
             })
           }
         }),

@@ -9,9 +9,13 @@ import {
 import Separator from '@/components/atoms/separator/Separator'
 import ItemHoverEffect from '@/components/layout/hover/ItemHoverEffect'
 import type { JSX } from 'react'
+import { useEffect, useState } from 'react'
 import UsersSection from '@/components/organisms/section/UsersSection'
 import type { UserImageInfo } from '@/components/organisms/section/UsersSection'
 import { Link } from 'react-router-dom'
+import axios from '@/plugin/axios'
+import type { ResponseResult } from '@/types'
+import type { AxiosResponse } from 'axios'
 
 type Naves = {
   icon: JSX.Element
@@ -56,27 +60,39 @@ export default function Sidebar() {
       to: '/coming-soon',
     },
   ]
-  // ユーザー一覧
-  const users: UserImageInfo[] = [
-    {
-      id: '1',
-      src: '/icon_user.png',
-      alt: 'user 1',
-      label: 'user 1',
-    },
-    {
-      id: '2',
-      src: '/icon_user.png',
-      alt: 'user 2',
-      label: 'user 2',
-    },
-    {
-      id: '3',
-      src: '/icon_user.png',
-      alt: 'user 3',
-      label: 'user 3',
-    },
-  ]
+  // ユーザー一覧の状態管理
+  const [users, setUsers] = useState<UserImageInfo[]>([])
+
+  useEffect(() => {
+    /**
+     * おすすめユーザーを取得
+     */
+    const fetchRecommendUsers = async (): Promise<void> => {
+      await axios
+        .get('/api/users/recommends/all')
+        .then(
+          (
+            response: AxiosResponse<
+              ResponseResult<{ userId: string; username: string; profilePicture: string }[]>
+            >,
+          ) => {
+            const result: UserImageInfo[] = []
+            response.data.data?.forEach((user) => {
+              result.push({
+                id: user.userId,
+                src: user.profilePicture,
+                alt: user.username,
+                label: user.username,
+              })
+            })
+
+            setUsers(result)
+          },
+        )
+    }
+
+    fetchRecommendUsers()
+  }, [])
 
   return (
     <aside className="min-w-48 p-2">
