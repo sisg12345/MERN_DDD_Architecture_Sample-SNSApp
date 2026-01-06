@@ -55,7 +55,7 @@ export class LikeRepository implements ILikeRepository {
       { $match: { userId: { $ne: userId }, postId: { $exists: true, $ne: null } } },
       {
         $group: {
-          _id: { userId: '$userId', postId: '$postId' },
+          _id: { userId: '$userId' },
           postId: { $first: '$postId' },
           userId: { $first: '$userId' },
           likeCount: { $sum: 1 },
@@ -68,10 +68,10 @@ export class LikeRepository implements ILikeRepository {
 
     // 取得結果
     const result = await MongoLike.aggregate(pipeline)
-
     // 返却データ
     const returnResult: { userId: string; postId: string }[] = []
-    result.map((like) => {
+
+    result.forEach((like) => {
       const { userId, postId } = like._id
 
       returnResult.push({
