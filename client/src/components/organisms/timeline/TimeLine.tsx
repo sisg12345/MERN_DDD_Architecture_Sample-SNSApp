@@ -121,7 +121,7 @@ export default function TimeLine({ isLoginUser, userId }: TimeLineProps) {
       fetchPostByUser(userId)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateTimeLine])
+  }, [isLoginUser, userId, updateTimeLine])
 
   return (
     <main className="p-4 w-full max-w-3xl">
