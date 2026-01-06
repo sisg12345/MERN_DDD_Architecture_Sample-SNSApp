@@ -36,7 +36,7 @@ export class GetTimelineAllPostsHandler implements IGetTimelineAllPostsHandler {
       // フォローしているユーザー一覧を取得
       const followings = await this._followRepository.findFollowingsByFollowerId(command.userId)
       // フォローしているユーザーのID一覧
-      const followUserIds = followings.map((following) => following.followerId)
+      const followUserIds = followings.map((following) => following.followingId)
       // フォローしているユーザーの投稿を取得
       const followUserPosts = await this._postRepository.findPostsByUserIds(followUserIds)
 

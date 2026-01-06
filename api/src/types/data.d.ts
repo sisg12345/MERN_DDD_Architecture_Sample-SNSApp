@@ -22,6 +22,10 @@ export interface User {
   coverPicture?: string
   // 管理者フラグ
   isAdmin: boolean
+  // フォロー中
+  isFollowing?: boolean
+  // フォロワー一覧
+  followings: { id: string; username: string; profilePicture: string }[]
   // 自己紹介
   description?: string
   // 居住地

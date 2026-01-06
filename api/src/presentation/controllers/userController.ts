@@ -22,7 +22,7 @@ import type { User } from '@/types'
  */
 export const getUser = async (req: Request<{ id: string }>, res: Response) => {
   // インプットデータ
-  const inputData = new GetUserCommand(req.params.id)
+  const inputData = new GetUserCommand(req.userId ?? '', req.params.id)
 
   // DI
   const getUserHandler = diContainer.get<GetUserHandler>(TYPES.IGetUserHandler)

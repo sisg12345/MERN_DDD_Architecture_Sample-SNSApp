@@ -10,12 +10,20 @@ interface UserProfileProps {
   profileUserId: string
   user: User
   onDeleteAccount: (userId: string) => Promise<void>
+  onFollowUser: (userId: string) => Promise<void>
+  onUnfollowUser: (userId: string) => Promise<void>
 }
 
 /**
  * ユーザープロフィール
  */
-export default function UserProfile({ profileUserId, user, onDeleteAccount }: UserProfileProps) {
+export default function UserProfile({
+  profileUserId,
+  user,
+  onDeleteAccount,
+  onFollowUser,
+  onUnfollowUser,
+}: UserProfileProps) {
   // ログインユーザーID情報
   const loginUserId = useAppSelector((state) => state.auth.userId)
   // ログインユーザーかどうか
@@ -34,8 +42,11 @@ export default function UserProfile({ profileUserId, user, onDeleteAccount }: Us
       />
       {!isLoginUser && (
         <div className="flex justify-center gap-2">
-          <Button>フォロー</Button>
-          <Button>フォロー解除</Button>
+          {user.isFollowing ? (
+            <Button onClick={() => onUnfollowUser(profileUserId)}>フォロー解除</Button>
+          ) : (
+            <Button onClick={() => onFollowUser(profileUserId)}>フォロー</Button>
+          )}
         </div>
       )}
       {isLoginUser && (
@@ -50,7 +61,9 @@ export default function UserProfile({ profileUserId, user, onDeleteAccount }: Us
         {/* タイムライン */}
         <TimeLine isLoginUser={isLoginUser} userId={profileUserId} />
         {/* サイドバー右 */}
-        <ProfileRightBar user={{ from: user.from ?? '', city: user.city ?? '' }} />
+        <ProfileRightBar
+          user={{ from: user.from ?? '', city: user.city ?? '', followings: user.followings ?? [] }}
+        />
       </div>
     </main>
   )

@@ -1,11 +1,13 @@
 import SectionTitle from '@/components/atoms/title/SectionTitle'
 import UsersSection from '@/components/organisms/section/UsersSection'
 import type { UserImageInfo } from '@/components/organisms/section/UsersSection'
+import type { User } from '@/types/data'
 
 interface ProfileRightBarProps {
   user: {
     from: string
     city: string
+    followings: User['followings']
   }
 }
 
@@ -14,26 +16,12 @@ interface ProfileRightBarProps {
  */
 export default function ProfileRightBar({ user }: ProfileRightBarProps) {
   // ユーザー一覧
-  const users: UserImageInfo[] = [
-    {
-      id: '1',
-      src: '/icon_user.png',
-      alt: 'userA',
-      label: 'userA',
-    },
-    {
-      id: '2',
-      src: '/icon_user.png',
-      alt: 'userB',
-      label: 'userB',
-    },
-    {
-      id: '3',
-      src: '/icon_user.png',
-      alt: 'userA',
-      label: 'userC',
-    },
-  ]
+  const users: UserImageInfo[] = user.followings.map(({ id, profilePicture, username }) => ({
+    id: id,
+    src: profilePicture,
+    alt: username,
+    label: username,
+  }))
 
   return (
     <aside className="min-w-48 p-2">
@@ -50,7 +38,11 @@ export default function ProfileRightBar({ user }: ProfileRightBarProps) {
         </div>
       </div>
       {/* ユーザー一覧 */}
-      <UsersSection title="あなたの友達" users={users} className="p-2 mt-2 shadow rounded" />
+      <UsersSection
+        title="フォロワー"
+        users={users}
+        className="p-2 mt-2 shadow rounded max-h-[252px] overflow-y-auto"
+      />
     </aside>
   )
 }

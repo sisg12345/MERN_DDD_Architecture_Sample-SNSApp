@@ -10,12 +10,14 @@ import type { User } from '@/types'
 import { UserModel } from '@/infrastructure/database/models/user'
 import { log } from '@/shared/decorators/log'
 import { IUserService } from '@/domain/interfaces/services/IUserService'
+import { IFollowRepository } from '@/domain/interfaces/repositories/IFollowRepository'
 
 @injectable()
 export class GetUserHandler implements IGetUserHandler {
   constructor(
     @inject(TYPES.IUserService) private readonly _userService: IUserService,
     @inject(TYPES.IUserRepository) private readonly _userRepository: IUserRepository,
+    @inject(TYPES.IFollowRepository) private readonly _followRepository: IFollowRepository,
   ) {}
 
   @log
@@ -36,7 +38,32 @@ export class GetUserHandler implements IGetUserHandler {
       // パスワードを除外
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...rest } = user.toObject()
-      data = rest
+      data = { ...rest, followings: [] }
+
+      // フォロワー一覧を取得
+      const followings = await this._followRepository.findFollowingsByFollowerId(command.userId)
+      await Promise.all(
+        followings.map(async (follow) => {
+          // ユーザー情報を取得
+          const user = await this._userRepository.findById(follow.followingId)
+          if (user) {
+            data!.followings.push({
+              id: user._id as string,
+              username: user.username,
+              profilePicture: user.profilePicture,
+            })
+          }
+        }),
+      )
+
+      // 自分以外のユーザー情報を取得する場合は、フォローしているかどうかを判定
+      if (command.requestUserId !== command.userId) {
+        // フォローしているかどうかを判定
+        data!.isFollowing = await this._userService.isFollowing(
+          command.requestUserId,
+          command.userId,
+        )
+      }
     } catch (error) {
       status = 500
       message = MESSAGE.error.server

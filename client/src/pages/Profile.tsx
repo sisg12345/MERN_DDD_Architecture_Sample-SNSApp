@@ -63,14 +63,46 @@ export default function Profile() {
       fetchUser(id)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [id])
+
+  /**
+   * ユーザーをフォロー
+   *
+   * @param userId ユーザーID
+   */
+  const handleFlowUser = async (userId: string): Promise<void> => {
+    await axios.put(`api/users/${userId}/follow`).then((response) => {
+      if (response.status === 201) {
+        setUser({ ...user, isFollowing: true })
+      }
+    })
+  }
+
+  /**
+   * ユーザーのフォローを解除
+   *
+   * @param userId ユーザーID
+   */
+  const handleUnfollowUser = async (userId: string): Promise<void> => {
+    await axios.put(`api/users/${userId}/unfollow`).then((response) => {
+      if (response.status === 200) {
+        setUser({ ...user, isFollowing: false })
+      }
+    })
+  }
 
   return (
     <PageContainer>
       {/* サイドバー */}
       <Sidebar />
       {/* ユーザープロフィール */}
-      <UserProfile profileUserId={id} user={user} onDeleteAccount={handleDeleteAccount} />
+      <UserProfile
+        profileUserId={id}
+        user={user}
+        onDeleteAccount={handleDeleteAccount}
+        onFollowUser={handleFlowUser}
+        onUnfollowUser={handleUnfollowUser}
+      />
     </PageContainer>
   )
 }

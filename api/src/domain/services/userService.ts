@@ -103,6 +103,7 @@ export class UserService implements IUserService {
    * @param followingId フォローユーザーID
    * @returns boolean
    */
+  @log
   public async isFollowingExists(
     followerId: string,
     followingId: string,
@@ -121,6 +122,21 @@ export class UserService implements IUserService {
     }
 
     return true
+  }
+
+  /**
+   * 指定したユーザーをフォローしているかどうかを確認
+   *
+   * @param followerId フォロワーのユーザーID
+   * @param followingId フォローユーザーID
+   * @returns boolean
+   */
+  @log
+  public async isFollowing(followerId: string, followingId: string): Promise<boolean> {
+    // フォロワーを取得
+    const follower = await this._followRepository.findFollower(followerId, followingId)
+
+    return follower !== null
   }
 
   /**

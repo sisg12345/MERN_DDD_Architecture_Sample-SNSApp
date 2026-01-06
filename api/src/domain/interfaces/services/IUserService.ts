@@ -37,6 +37,15 @@ export interface IUserService {
   ): Promise<boolean> | never
 
   /**
+   * 指定したユーザーをフォローしているかどうかを確認
+   *
+   * @param followerId フォロワーのユーザーID
+   * @param followingId フォローユーザーID
+   * @returns boolean
+   */
+  isFollowing(followerId: string, followingId: string): Promise<boolean>
+
+  /**
    * 更新権限があるかどうかを確認
    *
    * @param userId ユーザーID
