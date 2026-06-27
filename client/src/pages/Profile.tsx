@@ -1,6 +1,5 @@
-import PageContainer from '@/components/layout/page/PageContainer'
 import UserProfile from '@/components/organisms/profile/UserProfile'
-import Sidebar from '@/components/organisms/sidebar/Sidebar'
+import UserProfileTemplate from '@/components/templates/UserProfileTemplate'
 import { useAppDispatch } from '@/hooks/useRedux'
 import axios from '@/plugin/axios'
 import { logout } from '@/stores/slices/authSlice'
@@ -13,7 +12,7 @@ import { useNavigate, useParams } from 'react-router-dom'
  * プロフィールページ
  */
 export default function Profile() {
-  // URLパラメータからIDを取得
+  // URLパラメータからユーザーIDを取得
   const { id = '' } = useParams()
   // ユーザー情報の状態管理
   const [user, setUser] = useState<User>({} as User)
@@ -91,18 +90,18 @@ export default function Profile() {
     })
   }
 
-  return (
-    <PageContainer>
-      {/* サイドバー */}
-      <Sidebar />
-      {/* ユーザープロフィール */}
-      <UserProfile
-        profileUserId={id}
-        user={user}
-        onDeleteAccount={handleDeleteAccount}
-        onFollowUser={handleFlowUser}
-        onUnfollowUser={handleUnfollowUser}
-      />
-    </PageContainer>
+  /**
+   * ユーザープロフィール
+   */
+  const userProfile = () => (
+    <UserProfile
+      profileUserId={id}
+      user={user}
+      onDeleteAccount={handleDeleteAccount}
+      onFollowUser={handleFlowUser}
+      onUnfollowUser={handleUnfollowUser}
+    />
   )
+
+  return <UserProfileTemplate renderContents={userProfile()} />
 }

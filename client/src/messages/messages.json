@@ -1,0 +1,29 @@
+{
+  "success": {
+    "profileUpdate": "プロフィールの更新に成功しました。"
+  },
+  "error": {
+    "unexpected": "予期せぬエラーが発生しました。しばらくしてからもう一度お試しください。",
+    "validation": {
+      "exit": {
+        "username": "このユーザー名は既に使用されています。",
+        "email": "このメールアドレスは既に使用されています。"
+      },
+      "required": "{field}は必須です。",
+      "maxLength": "{field}は{max}文字以下で入力してください。",
+      "minLength": "{field}は{min}文字以上で入力してください。",
+      "format": "{field}の形式が正しくありません。",
+      "patternAlphabet": "{field}は半角英数字混合で入力してください。",
+      "mismatch": "{field}と一致しません。"
+    }
+  },
+  "placeholder": {
+    "input": {
+      "username": "ユーザー名を入力してください",
+      "description": "自己紹介を入力してください",
+      "email": "メールアドレスを入力してください",
+      "from": "出身を入力してください",
+      "city": "都市を入力してください"
+    }
+  }
+}

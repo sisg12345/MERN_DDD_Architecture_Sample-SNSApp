@@ -12,21 +12,28 @@ import type { JSX } from 'react'
 import { useEffect, useState } from 'react'
 import UsersSection from '@/components/organisms/section/UsersSection'
 import type { UserImageInfo } from '@/components/organisms/section/UsersSection'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from '@/plugin/axios'
 import type { ResponseResult } from '@/types'
 import type { AxiosResponse } from 'axios'
+import { useAppSelector } from '@/hooks/useRedux'
 
 type Naves = {
   icon: JSX.Element
   label: string
   to: string
+  onClick?: () => void
 }[]
 
 /**
  * サイドバー
  */
 export default function Sidebar() {
+  // navigateフック
+  const navigate = useNavigate()
+  // ログインユーザーIDを取得
+  const loginUserId = useAppSelector((state) => state.auth.userId)
+
   // ナビゲーション
   const naves: Naves = [
     {
@@ -52,7 +59,14 @@ export default function Sidebar() {
     {
       icon: <PersonIcon />,
       label: 'プロフィール',
-      to: '/coming-soon',
+      to: '#',
+      onClick: () => {
+        if (loginUserId) {
+          navigate(`/profiles/${loginUserId}/edit`)
+        } else {
+          navigate('/login')
+        }
+      },
     },
     {
       icon: <SettingIcon />,
@@ -99,7 +113,7 @@ export default function Sidebar() {
       <nav>
         <ul>
           {naves.map((nav, index) => (
-            <li key={index}>
+            <li key={index} onClick={nav.onClick}>
               <Link to={nav.to}>
                 <ItemHoverEffect className="flex items-center p-2 my-1">
                   {nav.icon}
@@ -112,7 +126,7 @@ export default function Sidebar() {
       </nav>
       <Separator />
       {/* ユーザー一覧 */}
-      <UsersSection title="おすすめフレンド" users={users} />
+      <UsersSection title="おすすめフォロワー" users={users} />
     </aside>
   )
 }

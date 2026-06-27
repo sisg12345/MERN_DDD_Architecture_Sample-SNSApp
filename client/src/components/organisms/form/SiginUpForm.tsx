@@ -3,6 +3,8 @@ import Input from '@/components/molecules/input/Input'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import messages from '@/messages/messages.json'
+import { formatMessage } from '@/utils/messageUtil'
 
 interface SignUpFormProps {
   className?: string
@@ -15,18 +17,23 @@ const schema = z
   .object({
     username: z
       .string()
-      .min(3, 'ユーザー名は3文字以上で入力してください')
-      .max(20, 'ユーザー名は20文字以下で入力してください'),
-    email: z.string().email('メールアドレスの形式が正しくありません'),
+      .min(3, formatMessage(messages.error.validation.minLength, ['ユーザー名', 3]))
+      .max(20, formatMessage(messages.error.validation.maxLength, ['ユーザー名', 20])),
+    email: z.string().email(formatMessage(messages.error.validation.format, ['メールアドレス'])),
     password: z
       .string()
-      .min(6, 'パスワードは6文字以上で入力してください')
-      .max(100, `パスワードは$100文字以下で入力してください`)
-      .regex(/^(?=.*?[a-z])(?=.*?\d)[a-z\d]/i, 'パスワードは半角英数字混合で入力してください'),
-    passwordConfirm: z.string().min(6, 'パスワードは6文字以上で入力してください'),
+      .min(6, formatMessage(messages.error.validation.minLength, ['パスワード', 6]))
+      .max(100, formatMessage(messages.error.validation.maxLength, ['パスワード', 100]))
+      .regex(
+        /^(?=.*?[a-z])(?=.*?\d)[a-z\d]/i,
+        formatMessage(messages.error.validation.patternAlphabet, ['パスワード']),
+      ),
+    passwordConfirm: z
+      .string()
+      .min(6, formatMessage(messages.error.validation.minLength, ['パスワード再入力', 6])),
   })
   .refine((data) => data.password === data.passwordConfirm, {
-    message: 'パスワードが一致しません',
+    message: formatMessage(messages.error.validation.mismatch, ['パスワード']),
     path: ['passwordConfirm'],
   })
 

@@ -45,9 +45,9 @@ export const updateUser = async (req: Request<{ id: string }, {}, User>, res: Re
   // DI
   const updateUserHandler = diContainer.get<UpdateUserHandler>(TYPES.IUpdateUserHandler)
   // ユースケース実行
-  const { status, message } = await updateUserHandler.handle(inputData)
+  const { status, message, errors } = await updateUserHandler.handle(inputData)
 
-  res.status(status).json({ message })
+  res.status(status).json({ message, errors })
 }
 
 /**

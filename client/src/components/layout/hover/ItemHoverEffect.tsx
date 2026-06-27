@@ -2,6 +2,7 @@ import type { PropsWithChildren } from 'react'
 
 interface ItemHoverEffectProps {
   className?: string
+  disabled?: boolean
 }
 
 /**
@@ -9,8 +10,10 @@ interface ItemHoverEffectProps {
  */
 export default function ItemHoverEffect({
   className = '',
+  disabled = false,
   children,
 }: PropsWithChildren<ItemHoverEffectProps>) {
-  className += ' hover:text-white hover:bg-rose-200'
-  return <div className={`${className} w-full rounded-md cursor-pointer`}>{children}</div>
+  const hoverClass = disabled ? '' : 'hover:text-white hover:bg-rose-200  cursor-pointer'
+
+  return <div className={`${className} ${hoverClass} w-full rounded-md`}>{children}</div>
 }

@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import messages from '@/messages/messages.json'
+import { formatMessage } from '@/utils/messageUtil'
 
 interface SignInFormProps {
   className?: string
@@ -13,12 +15,15 @@ interface SignInFormProps {
 
 // バリデーションスキーマ
 const schema = z.object({
-  email: z.string().email('メールアドレスの形式が正しくありません'),
+  email: z.string().email(formatMessage(messages.error.validation.format, ['メールアドレス'])),
   password: z
     .string()
-    .min(6, 'パスワードは6文字以上で入力してください')
-    .max(100, `パスワードは$100文字以下で入力してください`)
-    .regex(/^(?=.*?[a-z])(?=.*?\d)[a-z\d]/i, 'パスワードは半角英数字混合で入力してください'),
+    .min(6, formatMessage(messages.error.validation.minLength, ['パスワード', 6]))
+    .max(100, formatMessage(messages.error.validation.maxLength, ['パスワード', 100]))
+    .regex(
+      /^(?=.*?[a-z])(?=.*?\d)[a-z\d]/i,
+      formatMessage(messages.error.validation.patternAlphabet, ['パスワード']),
+    ),
 })
 
 type FormValues = z.infer<typeof schema>

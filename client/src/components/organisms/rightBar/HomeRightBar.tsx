@@ -36,6 +36,48 @@ export default function HomeRightBar() {
       alt: 'user 3',
       label: 'user 3',
     },
+    {
+      id: '4',
+      src: '/icon_user.png',
+      alt: 'user 4',
+      label: 'user 4',
+    },
+    {
+      id: '5',
+      src: '/icon_user.png',
+      alt: 'user 5',
+      label: 'user 5',
+    },
+    {
+      id: '6',
+      src: '/icon_user.png',
+      alt: 'user 6',
+      label: 'user 6',
+    },
+    {
+      id: '7',
+      src: '/icon_user.png',
+      alt: 'user 7',
+      label: 'user 7',
+    },
+    {
+      id: '8',
+      src: '/icon_user.png',
+      alt: 'user 8',
+      label: 'user 8',
+    },
+    {
+      id: '9',
+      src: '/icon_user.png',
+      alt: 'user 9',
+      label: 'user 9',
+    },
+    {
+      id: '10',
+      src: '/icon_user.png',
+      alt: 'user 10',
+      label: 'user 10',
+    },
   ]
   // プロモーション広告一覧
   const promotions: Promotions = [
@@ -70,8 +112,8 @@ export default function HomeRightBar() {
       </div>
       {/* ユーザー一覧 */}
       <UsersSection
-        title="オンラインのフレンド"
-        className="p-2 mt-2 shadow rounded"
+        title="オンラインのフォロワー"
+        className="p-2 mt-2 shadow rounded max-h-[252px] overflow-y-auto"
         users={users}
         showOnlineStatus={true}
       />

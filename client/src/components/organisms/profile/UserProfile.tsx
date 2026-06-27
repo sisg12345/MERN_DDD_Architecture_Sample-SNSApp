@@ -1,6 +1,6 @@
 import TimeLine from '@/components/organisms/timeline/TimeLine'
 import ProfileRightBar from '@/components/organisms/rightBar/ProfileRightBar'
-import UserProfileInfo from './UserProfileInfo'
+import UserProfileForm from '@/components/organisms/form/UserProfileForm'
 import Button from '@/components/atoms/button/Button'
 import type { User } from '@/types'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
@@ -34,12 +34,7 @@ export default function UserProfile({
   return (
     <main className="p-4 w-full">
       {/* ユーザープロフィール情報 */}
-      <UserProfileInfo
-        username={user.username}
-        description={user.description}
-        backgroundSrc={user.profilePicture}
-        userAccountSrc={user.profilePicture}
-      />
+      <UserProfileForm profileUserId={profileUserId} user={user} readonly={true} />
       {!isLoginUser && (
         <div className="flex justify-center gap-2">
           {user.isFollowing ? (

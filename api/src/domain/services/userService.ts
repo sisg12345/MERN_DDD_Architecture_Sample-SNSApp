@@ -58,6 +58,7 @@ export class UserService implements IUserService {
       throw new ConflictError()
     }
 
+    // ユーザーを取得
     user = await this._userRepository.findUserByUsername(username)
     // ユーザーが存在しない場合は404エラーをスロー
     if (!user) {

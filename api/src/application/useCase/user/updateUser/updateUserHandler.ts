@@ -10,6 +10,7 @@ import { ForbiddenError } from '@/shared/errors/forbiddenError'
 import { IUserService } from '@/domain/interfaces/services/IUserService'
 import { ConflictError } from '@/shared/errors/conflictError'
 import { log } from '@/shared/decorators/log'
+import { UserModel } from '@/infrastructure/database/models/user'
 
 @injectable()
 export class UpdateUserHandler implements IUpdateUserHandler {
@@ -22,10 +23,11 @@ export class UpdateUserHandler implements IUpdateUserHandler {
   public async handle(command: Command): Promise<ResponseResult> {
     let status = 200
     let message = MESSAGE.success.update
+    const errors: Record<string, string> = {}
 
     try {
       // バリデーション
-      await this.validate(command)
+      await this.validate(command, errors)
 
       // ユーザー情報を更新
       await this._userRepository.updateUser(command.updateData.id, command.updateData)
@@ -46,6 +48,7 @@ export class UpdateUserHandler implements IUpdateUserHandler {
     return {
       status,
       message,
+      errors,
     }
   }
 
@@ -55,16 +58,21 @@ export class UpdateUserHandler implements IUpdateUserHandler {
    * @param command インプットデータ
    */
   @log
-  private async validate(command: Command): Promise<void> {
-    // ユーザーの存在チェック
-    await this._userService.isUserExits(command.updateData.id)
-    // 変更しようとするメールアドレスとユーザー名が、他のユーザーに登録されていないか確認
-    if (command.updateData.email && command.updateData.username) {
-      await this._userService.isEmailOrUserUsed(
-        command.updateData.id,
-        command.updateData.email,
-        command.updateData.username,
-      )
+  private async validate(command: Command, errors: Record<string, string>): Promise<void> | never {
+    // ユーザー名の存在チェック
+    const username = await this._userRepository.findUserByUsername(command.updateData.username!)
+    if (username && username.id !== command.userId) {
+      errors.username = MESSAGE.error.usernameAlreadyExists
+    }
+
+    // メールアドレスの存在チェック
+    const email = await this._userRepository.findUserByEmail(command.updateData.email!)
+    if (email && email.id !== command.userId) {
+      errors.email = MESSAGE.error.emailAlreadyExists
+    }
+
+    if (Object.keys(errors).length > 0) {
+      throw new ConflictError()
     }
     // ユーザーの更新権限チェック
     await this._userService.hasUpdateAuthority(command.userId)

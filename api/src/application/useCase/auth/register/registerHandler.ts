@@ -66,6 +66,7 @@ export class RegisterHandler implements IRegisterHandler {
       errors.username = MESSAGE.error.usernameAlreadyExists
     }
 
+    // メールアドレスの存在チェック
     const email = await this._userRepository.findUserByEmail(command.email)
     if (email) {
       errors.email = MESSAGE.error.emailAlreadyExists
