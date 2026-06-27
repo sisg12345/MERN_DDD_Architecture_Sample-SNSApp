@@ -1,13 +1,14 @@
 import { useEffect, useState, type InputHTMLAttributes } from 'react'
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  layout?: string
   errorMessage?: string
 }
 
 /**
  * 入力フィールド
  */
-export default function Input({ errorMessage = '', ...props }: InputProps) {
+export default function Input({ layout = '', errorMessage = '', ...props }: InputProps) {
   // props.classNameはreadonlyであるため、props.classNameを変更することはできない
   const { className = '', ...rest } = props
   // エラー時のスタイルの状態管理
@@ -25,7 +26,7 @@ export default function Input({ errorMessage = '', ...props }: InputProps) {
   }, [errorMessage])
 
   return (
-    <div>
+    <div className={layout}>
       <input
         className={`${className} ${errorStyle} w-full h-12 p-2 focus:outline-none rounded hover:bg-rose-200 hover:text-white text-rose-400 `}
         {...rest}

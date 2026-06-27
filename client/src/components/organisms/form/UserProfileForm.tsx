@@ -116,17 +116,16 @@ export default function UserProfileForm({
       >
         <div className="flex items-center mt-5">
           <label htmlFor="username">ユーザー名:</label>
-          <div className="flex-1">
-            <Input
-              className="bg-transparent"
-              type="text"
-              maxLength={20}
-              placeholder={readonly ? '' : formatMessage(messages.placeholder.input.username)}
-              readOnly={readonly}
-              {...register('username')}
-              errorMessage={formErrors.username?.message || errors?.username}
-            />
-          </div>
+          <Input
+            className="bg-transparent"
+            layout="flex-1"
+            type="text"
+            maxLength={20}
+            placeholder={readonly ? '' : formatMessage(messages.placeholder.input.username)}
+            readOnly={readonly}
+            {...register('username')}
+            errorMessage={formErrors.username?.message || errors?.username}
+          />
         </div>
         <Separator />
         <div className="flex flex-col mt-6">
@@ -144,46 +143,45 @@ export default function UserProfileForm({
         <Separator />
         <div className="flex items-center">
           <label htmlFor="email">メールアドレス:</label>
-          <div className="flex-1">
-            <Input
-              className="bg-transparent"
-              type="text"
-              placeholder={readonly ? '' : formatMessage(messages.placeholder.input.email)}
-              readOnly={readonly}
-              {...register('email')}
-              errorMessage={formErrors.email?.message || errors?.email}
-            />
-          </div>
+          <Input
+            className="bg-transparent"
+            layout="flex-1"
+            type="text"
+            placeholder={readonly ? '' : formatMessage(messages.placeholder.input.email)}
+            readOnly={readonly}
+            {...register('email')}
+            errorMessage={formErrors.email?.message || errors?.email}
+          />
         </div>
         <Separator />
         <div className="flex items-center">
           <label htmlFor="from">出身:</label>
-          <div className="flex-1">
-            <Input
-              className="bg-transparent"
-              type="text"
-              maxLength={50}
-              placeholder={readonly ? '' : formatMessage(messages.placeholder.input.from)}
-              readOnly={readonly}
-              {...register('from')}
-              errorMessage={formErrors.from?.message}
-            />
-          </div>
+          {/* <div className=""> */}
+          <Input
+            className="bg-transparent"
+            layout="flex-1"
+            type="text"
+            maxLength={50}
+            placeholder={readonly ? '' : formatMessage(messages.placeholder.input.from)}
+            readOnly={readonly}
+            {...register('from')}
+            errorMessage={formErrors.from?.message}
+          />
+          {/* </div> */}
         </div>
         <Separator />
         <div className="flex items-center">
           <label htmlFor="city">都市:</label>
-          <div className="flex-1">
-            <Input
-              className="bg-transparent"
-              type="text"
-              maxLength={50}
-              placeholder={readonly ? '' : formatMessage(messages.placeholder.input.city)}
-              readOnly={readonly}
-              {...register('city')}
-              errorMessage={formErrors.city?.message}
-            />
-          </div>
+          <Input
+            className="bg-transparent"
+            layout="flex-1"
+            type="text"
+            maxLength={50}
+            placeholder={readonly ? '' : formatMessage(messages.placeholder.input.city)}
+            readOnly={readonly}
+            {...register('city')}
+            errorMessage={formErrors.city?.message}
+          />
         </div>
       </div>
       {isSuccess && (
