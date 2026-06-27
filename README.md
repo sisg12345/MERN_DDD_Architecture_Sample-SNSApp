@@ -88,6 +88,15 @@ cd /app/api
 npm run dev
 ```
 
+`npm run dev` と `npm run serve` の違い:
+
+| Command | 用途 | 挙動 |
+| --- | --- | --- |
+| `npm run dev` | 開発中の起動 | `nodemon` 経由で起動し、`src` 配下の `.ts` / `.js` を監視して変更時に自動再起動します。 |
+| `npm run serve` | 単発の起動 | `ts-node` で `src/server.ts` を一度だけ起動します。ファイル変更時の自動再起動はありません。 |
+
+普段の開発では `npm run dev` を使用します。
+
 API は以下で起動します。
 
 ```text
